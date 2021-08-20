@@ -22,16 +22,19 @@ export default {
   },
   methods: {
     addTodo: function(){
-      // 3 - 값이 있을때만 저장하도록 if문으로 감싸줌
+      // 값이 있을때만 저장하도록 if문으로 감싸줌
       if (this.newTodoItem !== ''){
           
-        // 1 - 텍스트 값과 더불어, 완료됐는지 여부를 객체에 저장
-        var obj = {completed: false, item: this.newTodoItem};
+        // app.vue로 옮김! this.newTodoItem만 emit로 보내주면 됨.
+        // this.$emit('이벤트 이름', 인자1, 인자2 ...);
+        this.$emit('addTodoItem', this.newTodoItem);
 
-        // 저장하는 로직
-        // 2 - js객체를 스트링으로 변환해서 저장
-        // localStorage.setItem(this.newTodoItem, obj); //참고
-        localStorage.setItem(this.newTodoItem, JSON.stringify(obj)); 
+        // // 텍스트 값과 더불어, 완료됐는지 여부를 객체에 저장
+        // var obj = {completed: false, item: this.newTodoItem};
+
+        // // 저장하는 로직
+        // // js객체를 스트링으로 변환해서 저장
+        // localStorage.setItem(this.newTodoItem, JSON.stringify(obj)); 
 
         //초기화
         // this.newTodoItem = '';
