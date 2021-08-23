@@ -9,15 +9,31 @@
       <i class="fas fa-plus addBtn"></i>
     </span>
 
+    <!-- SLOT -->
+    <Modal v-if="showModal" @close="showModal = false">
+      <!-- 사용할 slot들에 삽입할 태그 및 이름 정의 -->
+      <!-- 내용 재정의 -->
+      <!-- 태그 내, 속성으로 slot의 이름 입력 -->
+      <h3 slot="header">
+        경고!
+        <i class="fas fa-times closeModalBtn" @click="showModal = false"></i>  
+      </h3>
+      <p slot="body">할 일을 입력해주세요.</p>
+      <span slot="footer">&copy; 인라</span>
+    </Modal>
+    
   </div>
 </template>
 
 <script>
+import Modal from './common/Modal.vue';
+
 export default {
   name: 'TodoInput',
   data(){
     return {
       newTodoItem: '',
+      showModal: false
     }
   },
   methods: {
@@ -39,12 +55,16 @@ export default {
         //초기화
         // this.newTodoItem = '';
         this.clearInput();
+      } else {
+        this.showModal = !this.showModal; // 경고창 나오게
       }
-
     },
     clearInput: function(){
       this.newTodoItem = '';
     }
+  },
+  components: {
+    Modal : Modal
   }
 }
 </script>
@@ -55,5 +75,5 @@ input:focus {outline:none;}
 .inputBox input {border-style: none; font-size: 0.9rem; width: 100%; height: 100%;box-sizing: border-box;}
 .addContainer { background: linear-gradient(to right, #6478FB, #8763FB); display: block; width: 3rem; border-radius: 0 5px 5px 0;position: absolute; right: 0; top: 0;}
 .addBtn {color:#fff; vertical-align: middle; }
-
+.closeModalBtn {color:#42b983;}
 </style>

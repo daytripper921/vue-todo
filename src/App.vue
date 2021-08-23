@@ -29,13 +29,13 @@ export default {
   methods: {
     // input에 입력했을 때, 아이템 등록
     // 1 - 파라미터 추가
-    addOneItem: function(todoItem){
+    addOneItem(todoItem){
                 
       // 텍스트 값과 더불어, 완료됐는지 여부를 객체에 저장
       // var obj = {completed: false, item: this.newTodoItem};
 
       // 파라미터로 변경 .. input에서 this.newTodoItem을 인자로 받았음
-      var obj = {completed: false, item: todoItem};
+      const obj = {completed: false, item: todoItem};
 
       // 저장하는 로직
       // js객체를 스트링으로 변환해서 저장
@@ -44,7 +44,7 @@ export default {
       // 항목 삽입
       this.todoItems.push(obj);
     },
-    removeOneItem: function(todoItem, index){
+    removeOneItem(todoItem, index){
      //해당 key의 아이템을 지움 // app으로 옮기기
       localStorage.removeItem(todoItem.item); //obj 아닌, key값에 접근해서 삭제
 
@@ -53,7 +53,7 @@ export default {
       this.todoItems.splice(index, 1);
     },
     // 체크 토글
-    toggleOneItem: function(todoItem, index){
+    toggleOneItem(todoItem, index){
       
       // completed 값 반대로 바꾸기
       // todoItem.completed = !todoItem.completed;
@@ -68,17 +68,17 @@ export default {
       // completed값이 바뀐 상태의 해당 아이템 다시 추가
       localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
     },
-    clearAllItems: function(){
+    clearAllItems(){
       localStorage.clear();
       this.todoItems = [];
     }
   },
   
   // todoList에 있던 todoitems[]와 lifecycle hook 옮겨옴
-  created: function(){
+  created(){
 
     if (localStorage.length > 0) { // 저장된 값 있으면 key를 가져와서 담기
-      for ( var i=0; i < localStorage.length ; i++){
+      for ( let i=0; i < localStorage.length ; i++){
         if (localStorage.key(i) !== 'loglevel:webpack-dev-server') {
 
           // input에서 setitem에 stringify 했기때문에 스트링임. 다시 객체로 바꿔야 함.

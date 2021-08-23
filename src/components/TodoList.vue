@@ -1,6 +1,6 @@
 <template>
   <div>
-      <ul>
+      <transition-group name="list" tag="ul">
         <!-- props로 받았기 때문에 todoItems를 propsdata로 변경 -->
         <li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
           <!-- 완료버튼 만들기 -->
@@ -13,7 +13,7 @@
             <i class="far fa-trash-alt"></i>
           </span>  
         </li>
-      </ul>
+      </transition-group>
   </div>
 </template>
 
@@ -33,7 +33,7 @@ export default {
   //   }
   // },
   // // 2 - lifecycle hook /created :: 로컬 스토리지에 저장된 값 가져오기
-  // created: function(){
+  // created(){
 
   //   if (localStorage.length > 0) { // 저장된 값 있으면 key를 가져와서 담기
   //     for ( var i=0; i < localStorage.length ; i++){
@@ -52,7 +52,7 @@ export default {
   // },
   methods: {
     // 클릭이벤트에서 인자로 넘긴 값 받기
-    removeTodo: function(todoItem, index){
+    removeTodo(todoItem, index){
       console.log(todoItem); // todoItem을 넘기면 app에서 객체로 받음.. app에서 todoItem이 아니라 todoItem.item을 지워야 함.
       this.$emit('removeItem', todoItem, index);
 
@@ -64,7 +64,7 @@ export default {
       // this.propsdata.splice(index, 1);
     },
     // 완료버튼 함수
-    toggleComplete: function(todoItem, index){
+    toggleComplete(todoItem, index){
       //원래 내용 app으로 옮기고 여기서는 emit 실행
 
       this.$emit('toggleItem', todoItem, index);
@@ -94,4 +94,14 @@ ul li p {width: calc(100% - 35px); box-sizing: border-box; white-space: normal;w
 .textCompleted {text-decoration: line-through; color: #b3adad;}
 .removeBtn {margin-left: auto; color:#de4343;width: 15px; height: 50px;display: flex; align-items: center;}
 
+
+/* 리스트 아이템 트랜지션 - 공홈 예제 붙여넣음 */
+
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
 </style>
