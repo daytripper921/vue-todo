@@ -1,15 +1,17 @@
 <template>
   <div>
       <transition-group name="list" tag="ul">
-        <!-- props로 받았기 때문에 todoItems를 propsdata로 변경 -->
-        <li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
+        <!-- 1 - propsdata를 vuex - state로 변경 -->
+        <!-- props로 받았기 때문에 todoItems를 propsdata로 변경 - X --> 
+        <li v-for="(todoItem, index) in this.$store.state.todoItems" v-bind:key="todoItem.item" class="shadow">
           <!-- 완료버튼 만들기 -->
-          <i class="fas fa-check checkBtn" v-bind:class="{checkBtnCompleted: todoItem.completed}" v-on:click="toggleComplete(todoItem, index)"></i>
+          <i class="fas fa-check checkBtn" v-bind:class="{checkBtnCompleted: todoItem.completed}" v-on:click="toggleComplete({todoItem, index})"></i>
 
           <p v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</p>
 
           <!-- item과 index를 리무브로 넘김 -->
-          <span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+          <!-- mapMutations 쓰면서 인자를 객체 하나로 묶어줘야 함!! -->
+          <span class="removeBtn" v-on:click="removeTodo({todoItem, index})">
             <i class="far fa-trash-alt"></i>
           </span>  
         </li>
@@ -18,13 +20,25 @@
 </template>
 
 <script>
+import {  mapMutations } from 'vuex'
+
 export default {
   name: 'TodoList',
+  // computed: {
+  //   // todoItems() {
+  //   //   return this.$store.getters.storedTodoItems
+  //   // }
+
+  //   // ...mapGetters(['storedTodoItems'])
+  //   ...mapGetters({
+  //     todoItems : 'storedTodoItems'
+  //   }) // 객체 방식은, store.js의 getters이름이랑 컴포넌트에서 사용하고자 하는 이름이 다를 때 사용
+  // },
   // 전에 배운건 이렇게 받았음...
   // props: {
   //   propsdata: Array
   // },
-  props: ['propsdata'],
+  // props: ['propsdata'], // 2 - 위 반복문을 state에서 가져오는걸로 바꿔서 필요없어짐
 
   // data() {
   //   return {
@@ -51,36 +65,52 @@ export default {
   //   }
   // },
   methods: {
+
+    // 맵 뮤테이션으로 사용
+    ...mapMutations({
+      removeTodo: 'removeOneItem', //인자를 여기 입력 안해도, 위 템플릿에서 호출할 때, 인자가 있으면 그걸 그대로 가져옴.
+      toggleComplete: 'toggleOneItem'
+    }),
+
     // 클릭이벤트에서 인자로 넘긴 값 받기
-    removeTodo(todoItem, index){
-      console.log(todoItem); // todoItem을 넘기면 app에서 객체로 받음.. app에서 todoItem이 아니라 todoItem.item을 지워야 함.
-      this.$emit('removeItem', todoItem, index);
+    // removeTodo(todoItem, index){
+    //   console.log(todoItem); // todoItem을 넘기면 app에서 객체로 받음.. app에서 todoItem이 아니라 todoItem.item을 지워야 함.
+    //   // this.$emit('removeItem', todoItem, index);
 
-      // //해당 key의 아이템을 지움 // app으로 옮기기
-      // localStorage.removeItem(todoItem);
+    //   // const obj = {
+    //   //   todoItem: todoItem,
+    //   //   index: index
+    //   // } 이것과 같음
+    //   this.$store.commit('removeOneItem', { todoItem, index });
 
-      // //화면 목록에서도 삭제 
-      // //변경해서 새로운 배열을 반환(slice와 차이점)
-      // this.propsdata.splice(index, 1);
-    },
+
+    //   // //해당 key의 아이템을 지움 // app으로 옮기기
+    //   // localStorage.removeItem(todoItem);
+
+    //   // //화면 목록에서도 삭제 
+    //   // //변경해서 새로운 배열을 반환(slice와 차이점)
+    //   // this.propsdata.splice(index, 1);
+    // },
     // 완료버튼 함수
-    toggleComplete(todoItem, index){
-      //원래 내용 app으로 옮기고 여기서는 emit 실행
+    // toggleComplete(todoItem, index){
+    //   //원래 내용 app으로 옮기고 여기서는 emit 실행
 
-      this.$emit('toggleItem', todoItem, index);
-      
-      //  // completed 값 반대로 바꾸기
-      // todoItem.completed = !todoItem.completed;
+    //   // this.$emit('toggleItem', todoItem, index);
 
-      // // 값 반대로 바꾼 걸 업데이트해야하는데, 해당api가 없기 때문에 지웠다가, 바뀐 값을 다시 저장하는거임.
+    //   this.$store.commit('toggleOneItem', { todoItem, index });
 
-      // // 로컬스토리지 데이터 갱신
-      // // 완료시 삭제
-      // localStorage.removeItem(todoItem.item);
-      // // completed값이 바뀐 상태의 해당 아이템 다시 추가
-      // localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+    //   //  // completed 값 반대로 바꾸기
+    //   // todoItem.completed = !todoItem.completed;
+
+    //   // // 값 반대로 바꾼 걸 업데이트해야하는데, 해당api가 없기 때문에 지웠다가, 바뀐 값을 다시 저장하는거임.
+
+    //   // // 로컬스토리지 데이터 갱신
+    //   // // 완료시 삭제
+    //   // localStorage.removeItem(todoItem.item);
+    //   // // completed값이 바뀐 상태의 해당 아이템 다시 추가
+    //   // localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
      
-    }
+    // }
   }
 }
 </script>

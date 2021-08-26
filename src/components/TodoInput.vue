@@ -19,7 +19,6 @@
         <i class="fas fa-times closeModalBtn" @click="showModal = false"></i>  
       </h3>
       <p slot="body">할 일을 입력해주세요.</p>
-      <span slot="footer">&copy; 인라</span>
     </Modal>
     
   </div>
@@ -43,7 +42,12 @@ export default {
           
         // app.vue로 옮김! this.newTodoItem만 emit로 보내주면 됨.
         // this.$emit('이벤트 이름', 인자1, 인자2 ...);
-        this.$emit('addTodoItem', this.newTodoItem);
+        // this.$emit('addTodoItem', this.newTodoItem);
+
+        //vuex 수정
+        // const text = this.newTodoItem.trim();
+        // this.$store.commit('addOneItem', text); -- 이렇게 해도 됨
+        this.$store.commit('addOneItem', this.newTodoItem);
 
         // // 텍스트 값과 더불어, 완료됐는지 여부를 객체에 저장
         // var obj = {completed: false, item: this.newTodoItem};
